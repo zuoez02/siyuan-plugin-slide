@@ -1,18 +1,49 @@
 {
-    "addTopBarIcon": "Add a top bar icon by plugin",
-    "cancel": "Cancel",
-    "save": "Save",
-    "byeMenu": "Bye, Menu!",
-    "helloPlugin": "Hello, Plugin!",
-    "byePlugin": "Bye, Plugin!",
-    "showDialog": "Show dialog",
-    "removedData": "Data deleted",
-    "confirmRemove": "Confirm to delete the data in ${name}?",
-    "insertEmoji": "Insert Emoji",
-    "removeSpace": "Remove Space",
-    "getTab": "Print out all opened custom tabs in the debugger",
-    "name": "SiYuan",
-    "hello": {
-        "makesure": "Before using this template, please read the <a href=\"https://github.com/siyuan-note/plugin-sample\">offical sample</a>, make sure that you've known about the pipeline for plugin developing."
+    "title": "Slides",
+    "buttonTitle": "Click to Play Slides",
+    "options": {
+        "visible": "Visible",
+        "faded": "Faded",
+        "hidden": "Hidden",
+        "enable": "Enable",
+        "disable": "Disable"
+    },
+    "config": {
+        "theme": {
+            "title": "Theme",
+            "description": "Switch theme"
+        },
+        "controlsBackArrows": {
+            "title": "Back Controller Arrow Style",
+            "description": "Switch back controller arrow style"
+        },
+        "progress": {
+            "title": "Progress Bar",
+            "description": "Switch display progress bar"
+        },
+        "controls": {
+            "title": "Controller",
+            "description": "Switch display controller"
+        },
+        "slideNumber": {
+            "title": "Page Number",
+            "description": "Switch display page number"
+        },
+        "keyboard": {
+            "title": "Keyboard Shortcuts",
+            "description": "Switch enable keyboard shortcuts"
+        },
+        "loop": {
+            "title": "Loop Playback",
+            "description": "Switch loop playback (enabled when autoplay is on)"
+        },
+        "autoplay": {
+            "title": "Autoplay",
+            "description": "Switch autoplay"
+        },
+        "autoSlide": {
+            "title": "Autoplay Speed",
+            "description": "Select the page turning speed when autoplay is on (seconds🐱)"
+        }
     }
 }

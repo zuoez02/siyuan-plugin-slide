@@ -53,38 +53,3 @@ export function getCurrentPage() {
     }
     throw new Error("未能获取到页面焦点！");
 }
-
-// 获取当前文档路径
-export async function getHpath() {
-    let currentPageID = getFileID()
-    let body = { "id": currentPageID }
-    let res = await request("/api/filetree/getHPathByID", body);
-
-    //检测返回值
-    if (res.code === 0) {
-        let currentPagePath = res.data;
-        return currentPagePath;
-    }
-    return null;
-}
-
-//传入 node节点列表 arr和数据抽取函数 fliter。
-// fliter 传入一个节点，返回一个字典
-// 字典格式：
-// {status,data}
-// status 为 ok，则代表为抽取成功，将data压入返回列表anwer，并最后返回。
-export function iterArr(arr, fliter) {
-
-    if (!arr && arr.length <= 0) {
-        return [];
-    }
-
-    let anwer = [];
-    for (let node of arr) {
-        let data = fliter(node);
-        if (data["status"] === "ok" && data["data"]) {
-            anwer.push(data["data"]);
-        }
-    }
-    return anwer;
-}

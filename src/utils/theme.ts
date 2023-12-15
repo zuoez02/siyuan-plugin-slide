@@ -1,5 +1,16 @@
-import amRed from '../themes/am_red.css?raw';
-
 export const themes = {
-    'am_red': amRed
+    'beige': 'beige',
+    'black-contrast': 'black-contrast',
+    'black': 'black',
+    'blood': 'blood',
+    'dracula': 'dracula',
+    'league': 'league',
+    'moon': 'moon',
+    'night': 'night',
+    'serif': 'serif',
+    'simple': 'simple',
+    'sky': 'sky',
+    'solarized': 'solarized',
+    'white': 'white',
+    'white-contast': 'white-contast',
 }

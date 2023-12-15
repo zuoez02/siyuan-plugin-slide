@@ -4,90 +4,87 @@ import { sup } from "@mdit/plugin-sup";
 import { sub } from "@mdit/plugin-sub";
 import { tasklist } from "@mdit/plugin-tasklist";
 import { align } from "@mdit/plugin-align";
+import Reveal from 'reveal.js';
+import Markdown from 'reveal.js/plugin/markdown/markdown.esm.js';
+import { ENABLE, VISIBLE } from "./constants";
 
-import { from } from "bespoke/lib/bespoke";
-import keys from "../bespoke/bespoke-keys";
-import * as scale from "bespoke-scale";
-import * as voltaire from "../bespoke/voltaire";
-import * as progress from "bespoke-backdrop";
-import * as backdrop from "bespoke-progress";
-import * as bullets from "bespoke-bullets";
+export function render(markdownText: string, el: HTMLElement, options: any) {
+  let html;
+  const marp = new Marpit({
+    markdown: {
+      html: true,
+    },
+    container: [new Element("div", { class: 'reveal reveal-viewport' }), new Element("div", { class: 'slides' })]
+  })
+    .use(mark)
+    .use(sup)
+    .use(sub)
+    .use(tasklist)
+    .use(align);
 
-export function render(markdownText: string, el: HTMLElement) {
-    let html, css;
-    const marp = new Marpit({
-        markdown: {
-            html: true,
-        },
-        slideContainer: new Element("section", { class: "slide" }),
-    })
-        .use(mark)
-        .use(sup)
-        .use(sub)
-        .use(tasklist)
-        .use(align);
+  const setting = "";
+  const iframe = document.createElement('iframe');
 
-    const theme = `
-    /* @theme example */
-    
-    section {
-      background-color: #369;
-      color: #fff;
-      font-size: 30px;
-      padding: 40px;
-    }
-    
-    h1,
-    h2 {
-      text-align: center;
-      margin: 0;
-    }
-    
-    h1 {
-      color: #8cf;
-    }
-    `;
-    marp.themeSet.default = marp.themeSet.add(theme);
+  iframe.setAttribute('class', 'fn__flex fn__flex-1');
+  iframe.setAttribute('id', 'marp-slide');
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.overflow = 'hidden';
+  iframe.style.border = '0';
 
-    let root: HTMLElement;
+  el.appendChild(iframe);
 
-    const setting = `
-<!-- theme: example -->
----
-`
-    // const shadow = root.attachShadow({ mode: "open" });
-    const iframe = document.createElement('iframe');
+  const inDocument = iframe.contentDocument;
+  const parent = inDocument.body as HTMLBodyElement;
 
-    iframe.setAttribute('class', 'fn__flex fn__flex-1');
-    iframe.setAttribute('id', 'marp-slide');
+  inDocument.addEventListener('click', () => {
+    window.focus();
+  })
 
-    el.appendChild(iframe);
+  const res = marp.render(setting + markdownText);
+  html = res.html;
 
-    const inDocument = iframe.contentDocument;
+  const dom = inDocument.createElement("div");
+  dom.innerHTML = html;
+  // dom.classList.add('reveal-viewport');
+  parent.appendChild(dom);
+  parent.style.margin = '0';
 
-    const style = inDocument.createElement("style");
-    const res = marp.render(setting + markdownText);
-    html = res.html;
-    css = res.css;
-    style.textContent = css;
-    inDocument.head.appendChild(style);
-    const dom = inDocument.createElement("div");
-    dom.innerHTML = html;
-    inDocument.body.appendChild(dom);
+  const style = inDocument.createElement("link");
+  style.setAttribute('rel', 'stylesheet');
+  style.setAttribute('href', '/plugins/siyuan-plugin-slide/reveal.css');
+  inDocument.head.appendChild(style);
 
-    const styl = document.head.firstChild;
-    const content = styl.textContent;
-    const transformStyle = inDocument.createElement('style');
-    transformStyle.textContent = content;
-    inDocument.head.appendChild(transformStyle);
+  const theme = inDocument.createElement("link");
+  theme.setAttribute('rel', 'stylesheet');
+  theme.setAttribute('href', `/plugins/siyuan-plugin-slide/theme/${options.theme}.css`);
+  inDocument.head.appendChild(theme);
+  let autoSlide;
+  if (options.autoplay === ENABLE) {
+    autoSlide = (typeof options.autoSlide === 'number' ? options.autoSlide : parseInt(options.autoSlide, 10)) || 5,
+    autoSlide *= 1000;
+  } else {
+    autoSlide = 0;
+  }
+  const config = {
+    progress: options.progress === VISIBLE,
+    controls: options.controls === VISIBLE,
+    controlsLayout: 'bottom-right',
+    controlsTutorial: false,
+    controlsBackArrows: options.controlsBackArrows || VISIBLE,
+    keyboard: options.keyboard === ENABLE,
+    width: 1280,
+    height: 720,
+    center: false,
+    slideNumber: options.slideNumber === VISIBLE,
+    touch: true,
+    autoSlide,
+    loop: options.loop === ENABLE,
+    embedded: false,
+  };
 
-
-    const deck = from({ parent: dom, slides: "div.marpit section" }, [
-        voltaire.default({ document: inDocument}),
-        bullets.default("li"),
-        keys({ document: inDocument }),
-        scale.default("tranform"),
-        progress.default(),
-        backdrop.default(),
-    ]);
+  const root = parent.querySelector('.reveal');
+  new (Reveal as any)(root, {
+    plugins: [Markdown],
+  }).initialize(config);
 }

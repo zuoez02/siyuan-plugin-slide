@@ -7,8 +7,6 @@ import { svelte } from "@sveltejs/vite-plugin-svelte"
 import zipPack from "vite-plugin-zip-pack";
 import fg from 'fast-glob';
 
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
-
 const args = minimist(process.argv.slice(2))
 const isWatch = args.watch || args.w || false
 const devDistDir = "./dev"
@@ -24,7 +22,6 @@ export default defineConfig({
         },
     },
     plugins: [
-        nodePolyfills({ include: ['util'] }),
         svelte(),
 
         viteStaticCopy({
@@ -43,6 +40,14 @@ export default defineConfig({
                 },
                 {
                     src: "./plugin.json",
+                    dest: "./",
+                },
+                {
+                    src: "./asset/theme/",
+                    dest: "./",
+                },
+                {
+                    src: "./asset/reveal.css",
                     dest: "./",
                 },
                 {
